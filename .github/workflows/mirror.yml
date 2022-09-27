@@ -4,21 +4,25 @@ name: Mirror repo to GitLab
 
 on:
   push:
-  delete:
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
 permissions:
   contents: read
   actions: read
+  secrets: read
 
 # One build per branch, cancel out of date builds
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+  fail-fast: true
 
 jobs:
   to_gitlab:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
